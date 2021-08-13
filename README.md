@@ -1,0 +1,2 @@
+# Holodice
+Holodice is a Star Wars inspired dice-rolling bot for discord. Besides the feature of simply rolling six-sided dice, it should be possible to roll any-sided-dice. It got an specialization for pen-and-paper uses. In addition to random dice-number generation it will provide some links to important websited for Star Wars. There might be future features like special dice, emoji support, more easter eggs and maybe even an option to use it to play music.
