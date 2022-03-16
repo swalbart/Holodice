@@ -1,3 +1,7 @@
+# Token
+# Prevents revealing the token by accident
+token.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

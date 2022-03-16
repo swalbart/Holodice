@@ -22,7 +22,9 @@ async def on_message(message):
     output = ""
     authorID = " <@" +str(message.author.id) +">"
 
-    # test for text commands
+#-----------------------------COMMANDS-----------------------------COMMANDS-----------------------------COMMANDS-----------------------------COMMANDS-----------------------------#
+
+    # test message for text commands
     if message.content.startswith("/status"):
         output = "Ich bin bereit wenn Ihr es seid, Meister"
     elif message.content.startswith("/help") or message.content.startswith("/hilfe"):
@@ -31,17 +33,18 @@ async def on_message(message):
         else:
             output = helpGeneral()
     elif message.content.startswith("/wiki"):
-        output = "Wookieepedia: <https://starwars.fandom.com/wiki/Main_Page> \nJedipedia: <https://jedipedia.fandom.com/wiki/Jedipedia:Hauptseite>"
+        output = "Wookieepedia: <https://starwars.fandom.com/wiki/Main_Page>"
+        output += "\nJedipedia: <https://jedipedia.fandom.com/wiki/Jedipedia:Hauptseite>"
     elif message.content.startswith("/theme"):
         if message.content.startswith("/themeping"):
             output ="@here we go again:\n"
-        output += "```.        .          .    .    .            .            .                   .\n               .               ..       .       .   .             .\n .      .     I n   t h e   l a s t   e p i s o d e   o f   . . .             .\n                     .              .       .                    .      .\n.        .               .       .     .            .\n   .           .        .                     .        .            .\n             .               .    .          .              .   .         .\n               _________________      ____         __________\n .       .    /                 |    /    \    .  |          \ \n     .       /    ______   _____| . /      \      |    ___    |     .     .\n             \    \    |   |       /   /\   \     |   |___>   |\n           .  \    \   |   |      /   /__\   \  . |         _/               .\n .     ________>    |  |   | .   /            \   |   |\    \_______    .\n      |            /   |   |    /    ______    \  |   | \           |\n      |___________/    |___|   /____/      \____\ |___|  \__________|    .\n  .     ____    __  . _____   ____      .  __________   .  _________\n       \    \  /  \  /    /  /    \       |          \    /         |      .\n        \    \/    \/    /  /      \      |    ___    |  /    ______|  .\n         \              /  /   /\   \ .   |   |___>   |  \    \ \n   .      \            /  /   /__\   \    |         _/.   \    \            +\n           \    /\    /  /            \   |   |\    \______>    |   .\n            \  /  \  /  /    ______    \  |   | \              /          .\n .       .   \/    \/  /____/      \____\ |___|  \____________/  DSA\n                               .                                        .\n     .                           .         .               .                 .\n                .                                   .            .\n```"
+        output += theme()
     elif message.content.startswith("/tren") or message.content.startswith("/cut"):
         output = seperator(message.content)
     elif message.content.startswith("/pew"):
         output = "404 Alderaan not found"
     elif message.content.startswith("/credits"):
-        output = "```Holodice by Tarees\nunter beobachtung von Lordi\n\nNo Ewoks were harmed during the production of Holodice\n(Ich werde hier wirklich überhaupt gar nicht von\n einem Sith Lord gezwungen das dazu zu schreiben.)\n\n$3(\)D |-|3£P \n              -74R335```"
+        output = "```Holodice by Tobi-Swali\nhttps://github.com/Tobi-Swali\n\nNo Ewoks were harmed during the production of Holodice\n```"
 
     elif message.content.startswith("/treffer") or message.content.startswith("/hit"):
         output = "Trefferwürfel: " +roll_hit() + authorID
@@ -51,80 +54,62 @@ async def on_message(message):
     elif message.content.startswith("/exit0"):
         await message .channel.send("Holowürfel müde - Holowürfel schlafen")
         exit()
-    #if (needAuthorID and (not output.startswith("'"'Das ist nicht der Text den ihr sucht'"' ~Tobi-Wan Kenobi"))):
+    #if (needAuthorID and (not output.startswith("'"'Das ist nicht der Text den ihr sucht'"' ~Obi-Wan Kenobi"))):
     #    output += authorID
 
-    #quickfix for /X commands
-    if (m=="/1"):
-        m="/1w20"
-    elif (m=="/2"):
-        m="/2w20"
-    elif (m=="/3"):
-        m="/3w20"
-    elif (m=="/4"):
-        m="/1w4"
-    elif (m=="/5"):
-        m="/1w5"
-    elif (m=="/6"):
-        m="/1w6"
-    elif (m=="/7"):
-        m="/1w7"
-    elif (m=="/8"):
-        m="/1w8"
-    elif (m=="/9"):
-        m="/1w9"
+    #-----------------------------DICE---------------------------------DICE---------------------------------DICE---------------------------------DICE---------------------------------#
 
     # dice-command-calculation
-    # only if output is empty, message is a slash-command AND first char after '/' is allowed
-    if ((output == "") and (message.content.startswith("/")) and (len(m)>2) and ((m[1]=="d") or (m[1]=="w") or (m[1]=="0") or (m[1]=="1") or (m[1]=="2") or (m[1]=="3") or (m[1]=="4") or (m[1]=="5") or (m[1]=="6") or (m[1]=="7") or (m[1]=="8") or (m[1]=="9"))):
-        amountStr = ""
-        diceStr = ""
-        valueStr = ""
-        amount = 1
-        dice = 0
-        value = 0       # value for the calculation with the operator
+    # inputfilter (/ AND d,w,1-9)
+    if ((output == "") and (message.content.startswith("/")) and (len(m)>=2) and ((m[1]=="d") or (m[1]=="w") or (m[1]=="1") or (m[1]=="2") or (m[1]=="3") or (m[1]=="4") or (m[1]=="5") or (m[1]=="6") or (m[1]=="7") or (m[1]=="8") or (m[1]=="9"))):
+        amountStr = ""              
+        diceStr = ""                
+        valueStr = ""               
+        amount = 0                  # 'amount' of dice
+        dice = 0                    # kind of 'dice'
+        value = 0                   # operand 'value'
         dw = "x"
-        operator = ""
-        # remove the "/" from the input message (message.content)
-        # l = length of string m; m = message
-        m = m[-(len(m)-1):]
-        # check command for amount (and shorten message-string) [while not next command, do...]
+        operand = ""
+        m = m[-(len(m)-1):]         # remove 1st char ("/")
+
+        # check for 'amount'
         while ((len(m) != 0) and ((m[0] != "d") and (m[0] != "w") and (m[0] != "+") and (m[0] != "-") and (m[0] != "*") and (m[0] != "/"))):
             if(((m[0] == "0") and (amountStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
                 amountStr += m[0]
             if (len(m)>1):
-                m = m[-(len(m)-1):] 
+                m = m[-(len(m)-1):]
             else:
                 m = ""
-        # if no amount occur use one dice
+        # edgecase: no amount
         if amountStr == "":
-            amountStr = "1" # amount is already initializes with 1
-        # convert amount
+            amountStr = "1"
+        # convert 'amount'
         amount = int(amountStr)
+
         # if m is still a message go on
         if len(m) !=0:
             if ((m[0] == "d") or (m[0] == "w")):
-                # rewrite dw (and shorten message-string)
                 dw = m[0]
                 m = m[-(len(m)-1):]
-            # check command for number (and shorten message-string) [while not next command, do...] ------------------------------
+
+            # check 'dice'
             while ((len(m) != 0) and ((m[0] != "+") and (m[0] != "-") and (m[0] != "*") and (m[0] != "/"))):
                 if(((m[0] == "0") and (diceStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
                     diceStr += m[0]
-                    print
                 if (len(m)>1):
                     m = m[-(len(m)-1):] 
                 else:
                     m = "+"
-            # some commands have no dice in this position. (/4+2 here the dice is in first place)
+            # convert 'dice'
             if diceStr !="":
                 dice = int(diceStr)
-            # continue only if amount is a number (cant roll a 0-sided dice)
+
+            # check 'operand'
             if len(m) >1:
-                # check command for operation (+-*/)
-                operator = m[0]
+                operand = m[0]
                 m= m[-(len(m)-1):]
-                # check command for value
+
+                # check 'value'
                 while (len(m) != 0):
                     if(((m[0] == "0") and (valueStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
                         valueStr += m[0]
@@ -132,29 +117,42 @@ async def on_message(message):
                         m = m[-(len(m)-1):] 
                     else:
                         m = "" 
-                    #m = m[-(len(m)-1):]
+                # convert 'value'
                 value = int(valueStr)
+        
+        # short throws (/X)
         if dw == "x":
-            # commands with only one number (z.B. /6) have the dice in first place instead of the amount
+            # short throw (/1 /2 /3 = 1d20 2d20 3d20)
             if amount <= 3:
-                # special case: /1 /2 /3 are equal to /1w20 /2w20 /3w20
                 dice =20
                 diceStr ="20"
+            # short throw (/X =1dX)
             else:
                 dice = amount
                 diceStr = amountStr
                 amount = 1
                 amountStr = "1"
             dw = "d"
+
         # roll the dice
         if  (dice>0):
-            output = "Rolled: " +amountStr +"x " +dw +diceStr +":   " +roll(amount, dice, operator, value) +authorID
+            if(value>0):
+                output = "Rolled: " +amountStr +"x " +dw +diceStr +" " +operand +valueStr +":   " +roll(amount, dice, operand, value) +authorID
+            else:
+                output = "Rolled: " +amountStr +"x " +dw +diceStr +":   " +roll(amount, dice, operand, value) +authorID
         else:
-            output = ""
+            output = "Command failed"
+            # for debugging
+            print(output+": <"+message.content+"> (["+amountStr+";"+str(amount)+"]["+dw+"]["+diceStr+";"+str(dice)+"]["+operand+"]["+valueStr+"]["+str(value)+"])")
 
+    # check if any 'output' available
     if output == "":
-        output = "'"'Das sind nicht die Befehle die Ihr sucht'"' ~Tobi-Wan Kenobi (try '/help')"
+        # No 'output' means incorrect command
+        output = "'"'Das sind nicht die Befehle die Ihr sucht'"' ~Obi-Wan Kenobi (try '/help')"
+    # send the 'output' to discord
     await message.channel.send(output)
+
+#-----------------------------HELP---------------------------------HELP---------------------------------HELP---------------------------------HELP---------------------------------#
 
 def helpGeneral():
     m = "```" # 3 characters (helpMaster())
@@ -182,8 +180,7 @@ def helpMaster():
     outputHelp = outputHelp[-(len(outputHelp)-36):]
     return (output0 +m +output1 +output2 +output3 +output4 +output5 +output6 +outputHelp)
 
-
-
+#-----------------------------METHODS------------------------------METHODS------------------------------METHODS------------------------------METHODS------------------------------#
 
 # seperator line with custom text
 def seperator(m):
@@ -198,12 +195,12 @@ def seperator(m):
         argsCounter += 1
     return (output1 +message +output2)
 
-# roll hit dice
+# roll hit body dice
 def roll_hit():
     # frequencies of body parts (customizable:)
     # (standard DsA: 3,3,2,2,4)
-    arm = 3
-    leg = 3
+    arm = 3         # (consider: it's the value per arm)
+    leg = 3         # (consider: it's the value per leg)
     head = 2
     stomach = 2
     torso = 4
@@ -226,7 +223,7 @@ def roll_hit():
     elif result<=amount:
         hit = "Brust"
     else:
-        hit = "404 Alderaan not found"
+        hit = "Rolling hit body dice failed"
     return hit
     
 
@@ -238,7 +235,7 @@ def roll_coin():
     elif coin==2:
         return "Tief/Zahl"
     else:
-        return "404 Alderaan not found"
+        return "Flip coin failed"
 
 # roll dice
 # a = amount; d = dice-sides; o = operator; v = value for operator
@@ -268,16 +265,59 @@ def roll(a, d, o, v):
             output += (str(round((total/v),2))+"*")
     return output
 
-token_path = 'token.txt'
+#-----------------------------VISUALS------------------------------VISUALS------------------------------VISUALS------------------------------VISUALS------------------------------#
 
-if os.path.exists(token_path):
-    with open(token_path, 'r') as file:
-        token = file.read().replace('\n', '')
-else:
-    token = input("Discord Token:")
-    with open(token_path, 'w') as file:
-        file.write(token)
+def theme():    #  slightly modified from http://www.ascii-art.de/ascii/s/starwars.txt
+    output =  "```.        .          .    .    .            .            .                   .\n"
+    output +=    "       .      .               ..       .       .   .             .\n"
+    output +=    " .            I n   t h e   l a s t   e p i s o d e   o f   . . .             .\n"
+    output +=    "                     .              .       .                      .      .\n"
+    output +=    ".       .                .       .     .            .\n"
+    output +=    "   .           .        .                     .        .            .\n"
+    output +=    "             .               .    .          .              .   .         .\n"
+    output +=    "               _________________      ____         __________         .\n"
+    output +=    " .       .    /                 |    /    \    .  |          \ \n"
+    output +=    "    .        /    ______   _____| . /      \      |    ___    |     .     .\n"
+    output +=    "             \    \    |   |       /   /\   \     |   |___>   |\n"
+    output +=    "           .  \    \   |   |      /   /__\   \  . |         _/               .\n"
+    output +=    " .     ________>    |  |   | .   /            \   |   |\    \_______    .\n"
+    output +=    "      |            /   |   |    /    ______    \  |   | \           |\n"
+    output +=    "      |___________/    |___|   /____/      \____\ |___|  \__________|    .\n"
+    output +=    "  .     ____    __  . _____   ____      .  __________   .  _________\n"
+    output +=    "       \    \  /  \  /    /  /    \       |          \    /         |      .\n"
+    output +=    "        \    \/    \/    /  /      \      |    ___    |  /    ______|  .\n"
+    output +=    "         \              /  /   /\   \ .   |   |___>   |  \    \ \n"
+    output +=    "   .      \            /  /   /__\   \    |         _/.   \    \            .\n"
+    output +=    "           \    /\    /  /            \   |   |\    \______>    |   .\n"
+    output +=    "            \  /  \  /  /    ______    \  |   | \              /          .\n"
+    output +=    " .       .   \/    \/  /____/      \____\ |___|  \____________/     \n"
+    output +=    "                  .            .                                        .\n"
+    output +=    "     .                           .         .               .                 .\n"
+    output +=    "                .            .                      .            .\n```"
+    return output
 
+#-----------------------------TOKEN--------------------------------TOKEN--------------------------------TOKEN--------------------------------TOKEN--------------------------------#
 
-# do not keep the key below for public. The key is unique and anyone can controll your bot with this key:
+#-------------------------------------------------------------------------------------------------------------------------#
+# For all who rather want to paste the token here instead of saveing it to the token.txt can do it the following way.     #
+# But I reccomend to not keep in the sourcecode because the key is unique and anyone can controll your bot with this key: #
+#-------------------------------------------------------------------------------------------------------------------------#
+token = "mytoken" # replace the word <mytoken> with your 59 character token
+
+if(len(token)<59):
+    # check for token in token.txt
+    token_path = 'token.txt'
+    if os.path.exists(token_path):
+        # token exits in token.txt
+        with open(token_path, 'r') as file:
+            token = file.read().replace('\n', '') 
+    else:
+        # no token found
+        print("\nFor your Information:")
+        print("To protect your token from beeing detected in the sourcecode of holodice it will get stored in a seperate file named token.txt in the same folder.")
+        print("You can find the token in the bot-configuration of the discord developers portal.")
+        print("This is a one-time process, so next time you start the bot it will be able to get the token automaticly from the token.txt.\n")
+        token = input("Discord token:")
+        with open(token_path, 'w') as file:
+            file.write(token)
 client.run(token)
