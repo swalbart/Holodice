@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language code="deutsch">
+
+    <!-- COMMAND INTERPRETATION -->
+    <!-- symbol --> 
+    <translation text="cmd">/</translation>
+    <!-- commands -->
+    <translation text="cmd_status">         status</translation>
+    <translation text="cmd_hit">            treffer</translation>
+    <translation text="cmd_coin">           münz</translation>
+    <translation text="cmd_shutdown">       exit0</translation>
+    <translation text="cmd_links">          wiki</translation>
+    <translation text="cmd_credits">        credits</translation>
+    <translation text="cmd_cut">            trenn</translation>
+    <translation text="cmd_help_master1">   hilfemeister</translation>
+    <translation text="cmd_help_master2">   hilfe meister</translation>
+    <translation text="cmd_help_player">    hilfe</translation>
+    <translation text="cmd_nani">           nani</translation>
+    <translation text="cmd_beri">           beri</translation>
+    <translation text="cmd_language">       sprach</translation>
+    <translation text="cmd_version">        version</translation>
+    <translation text="cmd_theme">          theme</translation>
+    <translation text="cmd_themeping">      themeping</translation>
+
+    <!-- BOT OUTPUT -->
+    <!-- help -->
+    <translation text="help_master01">      Status:            /status         | gibt bescheid ob Bot bereit ist</translation>
+    <translation text="help_master02">      Version:           /version        | zeigt die aktuelle Version des bots</translation>
+    <translation text="help_master03">      Theme:             /theme          | gibt aus: In the last episode of... + Bild</translation>
+    <translation text="help_master04">      .                  /themeping      | wie theme, pingt aber alle</translation>
+    <translation text="help_master05">      Trennlinie:        /trenner  /cut  | /trenn /cut + Trennlinientext</translation>
+    <translation text="help_master06">      .                                  | Alles nach dem ersten Leerzeichen wird Trennlinientext</translation>
+    <translation text="help_master07">      Sprache:           /sprache  /lang | zeigt die ausgewählte Sprache</translation>
+    <translation text="help_master08">      .                  /sprache xy     | Sprache zu xy umstellen</translation>
+    <translation text="help_master09">      Bot ausschalten:   /exit0          | ACHTUNG: Bot startet nicht automatisch neu</translation>
+    <translation text="help_player01">      Vereinfachte 20er: /1 /2 /3        | / &amp; Menge an 20ern [max.3]</translation>
+    <translation text="help_player02">      Einfache Würfe:    /10 /6+2        | / &amp; Würfel [ab 4] &amp; (+-*/ &amp; Wert)</translation>
+    <translation text="help_player03">      Eingabe:           /2d6+5          | / &amp; (Menge) &amp; d|w &amp; Würfel &amp; (+-*/ &amp; Wert)</translation>
+    <translation text="help_player04">      Münzwurf:          /münze    /coin | Liefert genau: &apos;Hoch/Kopf&apos; oder &apos;Tief/Zahl&apos;</translation>
+    <translation text="help_player05">      Trefferwürfel:     /treffer  /hit  | Zeigt welcher Teil des Körpers getroffen wird </translation>
+    <translation text="help_player06">      Links:             /wiki           | Wookieepedia und Jedipedia</translation>
+    <translation text="help_player07">      Credits:           /credits        | Holodice Credits</translation>
+    
+    <!-- general -->
+    <translation text="status">             Ich bin bereit wenn Ihr es seid, Meister</translation>
+    <translation text="hit">                Trefferwürfel: </translation>
+    <translation text="coin">               Münzwurf: </translation>
+    <translation text="shutdown">           Holodice müde - Holodice schlafen</translation>
+    <translation text="links1">             Wookieepedia: &lt;https://starwars.fandom.com/wiki/Main_Page&gt;</translation>
+    <translation text="links2">             Jedipedia: &lt;https://jedipedia.fandom.com/wiki/Jedipedia:Hauptseite&gt;</translation>
+    <translation text="credits1">           **Holodice von Swali** (swalbart)</translation>
+    <translation text="credits2">           &lt;https://github.com/swalbart&gt;</translation>
+    <translation text="credits3">           &lt;https://github.com/swalbart/Holodice&gt;</translation>
+    <translation text="credits4">           *Keine Ewoks kamen bei der Produktion von Holodice zu Schaden*</translation>
+    <translation text="themeping">          @here Es geht weiter mit</translation>
+    <translation text="general_error_input">'Das sind nicht die Befehle die Ihr sucht' ~Obi-Wan Kenobi (hilfe unter '/help')</translation>
+
+    <!-- language -->
+    <translation text="language_selected">                  Aktuell ist folgende Sprache ausgewählt: </translation>
+    <translation text="language_change_text">               Sie können die Sprache wie folgt ändern: </translation>
+    <translation text="language_change_success">            Die Sprache wurde erfolgreich geändert auf: </translation>
+    <translation text="language_replace_text">              Ersetze &apos;xx&apos; mit einer der folgenden Sprachen: </translation>
+    <translation text="language_error_unknown">             Ändern der Sprache fehlgeschlagen. Die ausgewählte Sprache ist unbekannt.</translation>
+    <translation text="language_error_too_many_arguments">  Ändern der Sprache fehlgeschlagen. Die Eingabe hat zu viele Wörter.</translation>
+
+    <!-- hit body dice -->
+    <translation text="hit_arm_left">       Linker Arm</translation>
+    <translation text="hit_arm_right">      Rechter Arm</translation>
+    <translation text="hit_leg_left">       Linkes Bein</translation>
+    <translation text="hit_leg_right">      Rechtes Bein</translation>
+    <translation text="hit_head">           Kopf</translation>
+    <translation text="hit_back">           Rücken</translation>
+    <translation text="hit_chest">          Brust</translation>
+    <translation text="hit_error">          Trefferwürfelwurf fehlgeschlagen (∿•͟ ͜ •)∿ ︵ ┻━┻</translation>
+
+    <!-- coin flip -->
+    <translation text="coin_high">          Hoch/Kopf</translation>
+    <translation text="coin_low">           Tief/Zahl</translation>
+    <translation text="coin_error">         Münzwurf fehlgeschlagen (∿•͟ ͜ •)∿ ︵ ┻━┻</translation>
+
+    <!-- token -->
+    <translation text="token1">             Zu Ihrer Information:</translation>
+    <translation text="token2">             Um sicherzustellen, dass Ihr token nicht im Quellcode von Holodice landet, wird er in einer separaten Datei names token.txt im gleichen Ordner gespeichert.</translation>
+    <translation text="token3">             Sie können den token in der Bot-konfiguration des discord developer portals finden.</translation>
+    <translation text="token4">             Dies ist ein einmaliger Prozess, sodass beim erneuten Starten des Bots der token automatisch aus der token.txt ausgelesen wird.</translation>
+
+</language>

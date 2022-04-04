@@ -2,6 +2,10 @@
 # Prevents revealing the token by accident
 token.txt
 
+# Dev files
+test.xml
+note.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

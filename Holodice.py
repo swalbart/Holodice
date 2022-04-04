@@ -1,11 +1,24 @@
+from re import I
 import discord
 import random
-import time
 import os
-import subprocess
-import sys
+import python_lang as lang
 
 client = discord.Client()
+lang.add("languages/en.xml", "english")
+lang.add("languages/de.xml", "deutsch")
+#lang.add("languages/test.xml", "test")  # for language tests
+lang.select("en")
+print("Greetings, The bot boots with its default language: "+lang.selected+".")
+
+# useful shortcut and markdown as variables for coding
+rt = "\n"       # rt = return
+cb = "```"      # cb = codeblock
+ii = "*"        # ii = italics
+bb = "**"       # bb = bold
+ib = "***"      # ib = italics and bold
+uu = "__"       # uu = underlined
+cc = "~~"       # cc = crossed (out)
 
 @client.event
 async def on_ready():
@@ -17,175 +30,213 @@ async def on_message(message):
     # make sure to not get triggered by own messages
     if message.author == client.user:
         return
-    message.content =message.content.lower()
-    m= message.content
+    m = message.content
+    m = m.lower()
+    
     output = ""
     authorID = " <@" +str(message.author.id) +">"
 
 #-----------------------------COMMANDS-----------------------------COMMANDS-----------------------------COMMANDS-----------------------------COMMANDS-----------------------------#
 
-    # test message for text commands
-    if message.content.startswith("/status"):
-        output = "Ich bin bereit wenn Ihr es seid, Meister"
-    elif message.content.startswith("/help") or message.content.startswith("/hilfe"):
-        if message.content.startswith("/helpmaster") or message.content.startswith("/hilfemeister") or message.content.startswith("/helpmeister") or message.content.startswith("/hilfemaster"):
-            output = helpMaster()
-        else:
-            output = helpGeneral()
-    elif message.content.startswith("/wiki"):
-        output = "Wookieepedia: <https://starwars.fandom.com/wiki/Main_Page>"
-        output += "\nJedipedia: <https://jedipedia.fandom.com/wiki/Jedipedia:Hauptseite>"
-    elif message.content.startswith("/theme"):
-        if message.content.startswith("/themeping"):
-            output ="@here we go again:\n"
-        output += theme()
-    elif message.content.startswith("/tren") or message.content.startswith("/cut"):
-        output = seperator(message.content)
-    elif message.content.startswith("/pew"):
-        output = "404 Alderaan not found"
-    elif message.content.startswith("/credits"):
-        output = "```Holodice by Tobi-Swali\nhttps://github.com/Tobi-Swali\n\nNo Ewoks were harmed during the production of Holodice\n```"
-
-    elif message.content.startswith("/treffer") or message.content.startswith("/hit"):
-        output = "Trefferwürfel: " +roll_hit() + authorID
-    elif message.content.startswith("/münz") or message.content.startswith("/coin"):
-        output = "50/50: " +roll_coin() + authorID
-
-    elif message.content.startswith("/exit0"):
-        await message .channel.send("Holowürfel müde - Holowürfel schlafen")
-        exit()
-    #if (needAuthorID and (not output.startswith("'"'Das ist nicht der Text den ihr sucht'"' ~Obi-Wan Kenobi"))):
-    #    output += authorID
+    if m.startswith(getLine("cmd")) or m.startswith(getLineDefault("cmd")):
+        m = m[-(len(m)-1):]                 # remove first charater
+        # test message for text commands
+        if m.startswith(getLine("cmd_status")) or m.startswith(getLineDefault("cmd_status")):
+                output = getLine("status")
+        elif m.startswith(getLine("cmd_help_player")) or m.startswith(getLineDefault("cmd_help_player")):
+            output = cb
+            if m.startswith(getLine("cmd_help_master1")) or m.startswith(getLine("cmd_help_master2")) or m.startswith(getLineDefault("cmd_help_master1")) or m.startswith(getLineDefault("cmd_help_master2")):
+                output += getLine("help_master01")+rt+getLine("help_master02")+rt+getLine("help_master03")+rt+getLine("help_master04")+rt+getLine("help_master05")+rt+getLine("help_master06")+rt+getLine("help_master07")+rt+getLine("help_master08")+rt+getLine("help_master09")+rt+rt
+            output += getLine("help_player01")+rt+getLine("help_player02")+rt+getLine("help_player03")+rt+getLine("help_player04")+rt+getLine("help_player05")+rt+getLine("help_player06")+rt+getLine("help_player07")+cb
+        elif m.startswith(getLine("cmd_links")) or m.startswith(getLineDefault("cmd_links")):
+            output = getLine("links1")+rt+getLine("links2")
+        elif m.startswith(getLine("cmd_theme")):
+            if m.startswith(getLine("cmd_themeping")):
+                output = getLine("themeping")+rt
+            output += theme()
+        elif m.startswith(getLine("cmd_cut")) or m.startswith(getLineDefault("cmd_cut")):
+            output = seperator(m)
+        elif m.startswith("alder"):
+            output = "404 Alderaan not found"
+        elif m.startswith("/pew") or m.startswith("pew"):
+            output= ii+"miss"+ii
+            if m.startswith("/pewpew") or m.startswith("/pew pew") or m.startswith("pewpew") or m.startswith("pew pew"):
+                output= bb+"miss intensifies"+bb
+                if m.startswith("/pewpewpew") or m.startswith("/pew pew pew") or m.startswith("pewpewpew") or m.startswith("pew pew pew"):
+                    output = ib+"critical miss"+ib
+                    if m.startswith("/pewpewpewpew") or m.startswith("/pew pew pew pew") or m.startswith("pewpewpewpew") or m.startswith("pew pew pew pew"):
+                        output = "Lets be "+ii+"realistic"+ii+", as a "+bb+"Stormtrooper"+bb+" you would be "+ib+"dead after three missed chances"+ib
+        elif m.startswith(getLine("cmd_credits")) or m.startswith(getLineDefault("cmd_credits")):
+            output = getLine("credits1")+rt+getLine("credits2")+rt+getLine("credits3")+rt+getLine("credits4")
+        elif m.startswith(getLine("cmd_hit")) or m.startswith(getLineDefault("cmd_hit")):
+            output = getLine("hit") +roll_hit() + authorID
+        elif m.startswith(getLine("cmd_coin")) or m.startswith(getLineDefault("cmd_coin")):
+            output = getLine("coin") +roll_coin() + authorID
+        # languages
+        elif m.startswith(getLine("cmd_language")) or m.startswith(getLineDefault("cmd_language")):
+            output = language(m)
+        # maintenance
+        elif m.startswith(getLine("cmd_shutdown")) or m.startswith(getLineDefault("cmd_shutdown")):
+            await message.channel.send(getLine("shutdown"))
+            exit()
+        elif m.startswith("dev"):   # unlisted in xml-language-files
+            output = getLine("status")
+        elif m.startswith(getLine("cmd_version")) or m.startswith(getLineDefault("cmd_version")):
+            output = "0.3.2"
 
     #-----------------------------DICE---------------------------------DICE---------------------------------DICE---------------------------------DICE---------------------------------#
 
-    # dice-command-calculation
-    # inputfilter (/ AND d,w,1-9)
-    if ((output == "") and (message.content.startswith("/")) and (len(m)>=2) and ((m[1]=="d") or (m[1]=="w") or (m[1]=="1") or (m[1]=="2") or (m[1]=="3") or (m[1]=="4") or (m[1]=="5") or (m[1]=="6") or (m[1]=="7") or (m[1]=="8") or (m[1]=="9"))):
-        amountStr = ""              
-        diceStr = ""                
-        valueStr = ""               
-        amount = 0                  # 'amount' of dice
-        dice = 0                    # kind of 'dice'
-        value = 0                   # operand 'value'
-        dw = "x"
-        operand = ""
-        m = m[-(len(m)-1):]         # remove 1st char ("/")
+        # dice-command-calculation
+        # inputfilter (d,w,1-9)
+        if (output == "" and (len(m)>=1) and ((m[0]=="d") or (m[0]=="w") or (m[0]=="1") or (m[0]=="2") or (m[0]=="3") or (m[0]=="4") or (m[0]=="5") or (m[0]=="6") or (m[0]=="7") or (m[0]=="8") or (m[0]=="9"))):
+            amountStr = ""              
+            diceStr = ""                
+            valueStr = ""               
+            amount = 0                  # 'amount' of dice
+            dice = 0                    # kind of 'dice'
+            value = 0                   # operand 'value'
+            dw = "x"
+            operand = ""                # 'operand'
 
-        # check for 'amount'
-        while ((len(m) != 0) and ((m[0] != "d") and (m[0] != "w") and (m[0] != "+") and (m[0] != "-") and (m[0] != "*") and (m[0] != "/"))):
-            if(((m[0] == "0") and (amountStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
-                amountStr += m[0]
-            if (len(m)>1):
-                m = m[-(len(m)-1):]
-            else:
-                m = ""
-        # edgecase: no amount
-        if amountStr == "":
-            amountStr = "1"
-        # convert 'amount'
-        amount = int(amountStr)
-
-        # if m is still a message go on
-        if len(m) !=0:
-            if ((m[0] == "d") or (m[0] == "w")):
-                dw = m[0]
-                m = m[-(len(m)-1):]
-
-            # check 'dice'
-            while ((len(m) != 0) and ((m[0] != "+") and (m[0] != "-") and (m[0] != "*") and (m[0] != "/"))):
-                if(((m[0] == "0") and (diceStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
-                    diceStr += m[0]
+            # check for 'amount'
+            while ((len(m) != 0) and ((m[0] != "d") and (m[0] != "w") and (m[0] != "+") and (m[0] != "-") and (m[0] != "*") and (m[0] != "/"))):
+                if(((m[0] == "0") and (amountStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
+                    amountStr += m[0]
                 if (len(m)>1):
-                    m = m[-(len(m)-1):] 
+                    m = m[-(len(m)-1):]
                 else:
-                    m = "+"
-            # convert 'dice'
-            if diceStr !="":
-                dice = int(diceStr)
+                    m = ""
+            # edgecase: no amount
+            if amountStr == "":
+                amountStr = "1"
+            # convert 'amount'
+            amount = int(amountStr)
 
-            # check 'operand'
-            if len(m) >1:
-                operand = m[0]
-                m= m[-(len(m)-1):]
+            # if m is still a message go on
+            if len(m) !=0:
+                if ((m[0] == "d") or (m[0] == "w")):
+                    dw = m[0]
+                    m = m[-(len(m)-1):]
 
-                # check 'value'
-                while (len(m) != 0):
-                    if(((m[0] == "0") and (valueStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
-                        valueStr += m[0]
+                # check 'dice'
+                while ((len(m) != 0) and ((m[0] != "+") and (m[0] != "-") and (m[0] != "*") and (m[0] != "/"))):
+                    if(((m[0] == "0") and (diceStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
+                        diceStr += m[0]
                     if (len(m)>1):
                         m = m[-(len(m)-1):] 
                     else:
-                        m = "" 
-                # convert 'value'
-                value = int(valueStr)
-        
-        # short throws (/X)
-        if dw == "x":
-            # short throw (/1 /2 /3 = 1d20 2d20 3d20)
-            if amount <= 3:
-                dice =20
-                diceStr ="20"
-            # short throw (/X =1dX)
-            else:
-                dice = amount
-                diceStr = amountStr
-                amount = 1
-                amountStr = "1"
-            dw = "d"
+                        m = "+"
+                # convert 'dice'
+                if diceStr !="":
+                    dice = int(diceStr)
 
-        # roll the dice
-        if  (dice>0):
-            if(value>0):
-                output = "Rolled: " +amountStr +"x " +dw +diceStr +" " +operand +valueStr +":   " +roll(amount, dice, operand, value) +authorID
+                # check 'operand'
+                if len(m) >1:
+                    operand = m[0]
+                    m= m[-(len(m)-1):]
+
+                    # check 'value'
+                    while (len(m) != 0):
+                        if(((m[0] == "0") and (valueStr !="")) or (m[0] == "1") or (m[0] == "2") or (m[0] == "3") or (m[0] == "4") or (m[0] == "5") or (m[0] == "6") or (m[0] == "7") or (m[0] == "8") or (m[0] == "9")):
+                            valueStr += m[0]
+                        if (len(m)>1):
+                            m = m[-(len(m)-1):] 
+                        else:
+                            m = "" 
+                    # convert 'value'
+                    value = int(valueStr)
+            
+            # short throws (/X)
+            if dw == "x":
+                # short throw (/1 /2 /3 = 1d20 2d20 3d20)
+                if amount <= 3:
+                    dice =20
+                    diceStr ="20"
+                # short throw (/X =1dX)
+                else:
+                    dice = amount
+                    diceStr = amountStr
+                    amount = 1
+                    amountStr = "1"
+                dw = "d"
+
+            # roll the dice
+            if  (dice>0):
+                if(value>0):
+                    output = "Rolled: " +amountStr +"x " +dw +diceStr +" " +operand +valueStr +":   " +roll(amount, dice, operand, value) +authorID
+                else:
+                    output = "Rolled: " +amountStr +"x " +dw +diceStr +":   " +roll(amount, dice, operand, value) +authorID
             else:
-                output = "Rolled: " +amountStr +"x " +dw +diceStr +":   " +roll(amount, dice, operand, value) +authorID
+                output = "Command failed"
+                # for debugging
+                print(output+": <"+m+"> (["+amountStr+";"+str(amount)+"]["+dw+"]["+diceStr+";"+str(dice)+"]["+operand+"]["+valueStr+"]["+str(value)+"])")
+
+        # check if any 'output' available
+        if output == "":
+            # No 'output' means incorrect command
+            output = getLine("general_error_input")
+        # send the 'output' to discord
+        await message.channel.send(output)
+
+#-----------------------------LANGUAGE-----------------------------LANGUAGE-----------------------------LANGUAGE-----------------------------LANGUAGE-----------------------------#
+
+def getLanguages():         # get all available languages
+    return lang.all()
+
+def getLine(text):          # line=keyword to output-string in xml
+    return getLineSuper(text, False)
+
+def getLineDefault(text):
+    return getLineSuper(text, True)
+
+def getLineSuper(text, defaultLanguage):            # line=keyword to output-string in xml
+    if defaultLanguage:
+        temp = lang.selected
+        lang.select("en")
+    output = ""
+    output = lang.get(text)                         # set output to deposited string of the ordered 'text'-command in the currently chosen language
+    if output == text:                              # recursive check (if text of current language equals text of this method call)
+        if not defaultLanguage:
+            output = getLineDefault(text)
         else:
-            output = "Command failed"
-            # for debugging
-            print(output+": <"+message.content+"> (["+amountStr+";"+str(amount)+"]["+dw+"]["+diceStr+";"+str(dice)+"]["+operand+"]["+valueStr+"]["+str(value)+"])")
-
-    # check if any 'output' available
-    if output == "":
-        # No 'output' means incorrect command
-        output = "'"'Das sind nicht die Befehle die Ihr sucht'"' ~Obi-Wan Kenobi (try '/help')"
-    # send the 'output' to discord
-    await message.channel.send(output)
-
-#-----------------------------HELP---------------------------------HELP---------------------------------HELP---------------------------------HELP---------------------------------#
-
-def helpGeneral():
-    m = "```" # 3 characters (helpMaster())
-    output0 = "**Viel zu lernen du noch hast:**\n" # 34 characters (helpMaster())
-    output1 = "Vereinfachte 20er: /1 /2 /3      | / & menge an 20ern [max.3]\n"
-    output2 = "Einfache Würfe:    /10 /6+2      | / & würfel [ab 4] & (+-*/ & Wert)\n"
-    output3 = "Eingabe:           /2d6+5        | / & (Menge) & d|w & Würfel & (+-*/ & Wert)\n" 
-    output4 = "Münzwurf (50/50):  /coin /münze  | Liefert genau: Hoch/Kopf bzw. Tief/Zahl\n"
-    output5 = "Trefferwürfel:     /hit /treffer | Gibt Trefferzone an\n"
-    output6 = "Links:             /wiki         | Wookieepedia und Jedipedia\n"
-    output7 = "Credits:           /credits      | Holodice Credits"
-    return (output0 +m +output1 +output2 +output3 +output4 +output5 +output6 +output7 +m)
-
-def helpMaster():
-    m = "```"
-    output0 = "**Hier mein Lord, wie Ihr befahlt:**\n"
-    output1 = "Status:            /status       | gibt bescheid ob Bot bereit ist\n"
-    output2 = "Theme:             /theme        | gibt aus: In the last episode of... + Bild\n"
-    output3 = "                   /themeping    | wie theme, pingt aber alle\n"
-    output4 = "Trennlinie:        /trenner Text | trenn.../cut + Trennlinientext\n"
-    output5 = "                                 | Alles nach dem ersten Leerzeichen wird Trennlinientext\n"
-    output6 = "Bot ausschalten:   /exit0        | ACHTUNG: Bot startet nicht automatisch neu\n\n"
-    outputHelp =(helpGeneral())
-    # cut of the first 37 charactersof outputHelp
-    outputHelp = outputHelp[-(len(outputHelp)-36):]
-    return (output0 +m +output1 +output2 +output3 +output4 +output5 +output6 +outputHelp)
+            output = "Error: Getting language text failed [for: "+text+"] (∿•͟ ͜ •)∿ ︵ ┻━┻"
+        if output.startswith("Error"):
+            output += rt+"Redirected to english. Could not find "+text+" in "+str(lang.selected)+" language"
+    output = output.lstrip(" ")                     # erase leading whitespaces from xml files
+    if output.startswith("."):                      # replace first '.' with a whitespace
+        output = output[-(len(output)-1):]
+        output = " "+output
+    if defaultLanguage:
+        lang.select(str(temp))
+    return output
+    
+def language(m):
+    output = ""
+    mArray = m.split()
+    printLangInfo = True
+    if len(mArray) == 2:                                    # allwos two arguments (2nd arguement is language string)
+        for element in getLanguages():
+            if (mArray[1] in element) and output == "":     # check if input language string is valid
+                lang.select(mArray[1])
+                output = getLine("language_change_success")+" "+lang.selected+rt
+                printLangInfo = False
+        if output == "":                                    # non-valid language: error
+            output += getLine("language_error_unknown")+" ("+mArray[1]+")"+rt
+    elif len(mArray) > 2:                                   # too many arguments: error
+        output += getLine("language_error_too_many_arguments")+rt
+    if printLangInfo:                                       # adds info about 'lang' command
+        output += getLine("language_selected")+lang.selected+rt
+        output += getLine("language_change_text")
+        output += " **"+getLine("cmd")+getLine("cmd_language")+" xx**"+rt
+        output += getLine("language_replace_text")+str(getLanguages())
+    return output
 
 #-----------------------------METHODS------------------------------METHODS------------------------------METHODS------------------------------METHODS------------------------------#
 
 # seperator line with custom text
 def seperator(m):
-    output1 = "```|\n|~==+++<<<<#####$$$$$$§§§§§§§"
-    output2 = " §§§§§§§$$$$$$#####>>>>+++==~\n| ```"
+    output1 = "```\\\n |~==+++<<<<#####$$$$$$§§§§§§§"
+    output2 = " §§§§§§§$$$$$$#####>>>>+++==~\n/```"
     messageArr = m.split()
     messageArgs = len(messageArr)
     argsCounter = 1
@@ -202,40 +253,41 @@ def roll_hit():
     arm = 3         # (consider: it's the value per arm)
     leg = 3         # (consider: it's the value per leg)
     head = 2
-    stomach = 2
-    torso = 4
+    chest = 2
+    back = 4
     # sum up and roll dice
-    amount = (2*arm +2*leg +head +stomach +torso)
+    amount = (2*arm +2*leg +head +chest +back)
     result = random.randint(1, amount)
     hit = ""
     if result<=arm:
-        hit = "Linker Arm"
+        hit = getLine("hit_arm_left")
     elif result<=(2*arm):
-        hit = "Rechter Arm"
+        hit = getLine("hit_arm_right")
     elif result<=(2*arm +leg):
-        hit = "Linkes Bein"
+        hit = getLine("hit_leg_left")
     elif result<=(2*(arm+leg)):
-        hit = "Rechtes Bein"
-    elif result<=(amount-(stomach +torso)):
-        hit = "Kopf"
-    elif result<=(amount-torso):
-        hit = "Rücken"
+        hit = getLine("hit_leg_right")
+    elif result<=(amount-(chest +chest)):
+        hit = getLine("hit_head")
+    elif result<=(amount-chest):
+        hit = getLine("hit_back")
     elif result<=amount:
-        hit = "Brust"
+        hit = getLine("hit_chest")
     else:
-        hit = "Rolling hit body dice failed"
+        hit = getLine("hit_error")
     return hit
     
-
 # flip coin
 def roll_coin():
     coin = random.randint(1, 2)
+    output = ""
     if coin==1:
-        return "Hoch/Kopf"
+        output = getLine("coin_high")
     elif coin==2:
-        return "Tief/Zahl"
+        output = getLine("coin_low")
     else:
-        return "Flip coin failed"
+        output = getLine("coin_error")
+    return output
 
 # roll dice
 # a = amount; d = dice-sides; o = operator; v = value for operator
@@ -302,7 +354,7 @@ def theme():    #  slightly modified from http://www.ascii-art.de/ascii/s/starwa
 # For all who rather want to paste the token here instead of saveing it to the token.txt can do it the following way.     #
 # But I reccomend to not keep in the sourcecode because the key is unique and anyone can controll your bot with this key: #
 #-------------------------------------------------------------------------------------------------------------------------#
-token = "mytoken" # replace the word <mytoken> with your 59 character token
+token = "mytoken" # here you are able to replace the word <mytoken> with your 59 character token (not recommended)
 
 if(len(token)<59):
     # check for token in token.txt
@@ -313,10 +365,7 @@ if(len(token)<59):
             token = file.read().replace('\n', '') 
     else:
         # no token found
-        print("\nFor your Information:")
-        print("To protect your token from beeing detected in the sourcecode of holodice it will get stored in a seperate file named token.txt in the same folder.")
-        print("You can find the token in the bot-configuration of the discord developers portal.")
-        print("This is a one-time process, so next time you start the bot it will be able to get the token automaticly from the token.txt.\n")
+        tokenInit = rt+getLine("token1")+rt+getLine("token2")+rt+getLine("token3")+rt+getLine("token4")
         token = input("Discord token:")
         with open(token_path, 'w') as file:
             file.write(token)
