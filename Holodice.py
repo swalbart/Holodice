@@ -82,7 +82,7 @@ async def on_message(message):
         elif m.startswith("dev"):   # unlisted in xml-language-files
             output = getLine("status")
         elif m.startswith(getLine("cmd_version")) or m.startswith(getLineDefault("cmd_version")):
-            output = "0.3.2"
+            output = "0.3.3"
 
     #-----------------------------DICE---------------------------------DICE---------------------------------DICE---------------------------------DICE---------------------------------#
 

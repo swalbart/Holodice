@@ -15,8 +15,6 @@
     <translation text="cmd_help_master1">   hilfemeister</translation>
     <translation text="cmd_help_master2">   hilfe meister</translation>
     <translation text="cmd_help_player">    hilfe</translation>
-    <translation text="cmd_nani">           nani</translation>
-    <translation text="cmd_beri">           beri</translation>
     <translation text="cmd_language">       sprach</translation>
     <translation text="cmd_version">        version</translation>
     <translation text="cmd_theme">          theme</translation>
@@ -53,7 +51,7 @@
     <translation text="credits3">           &lt;https://github.com/swalbart/Holodice&gt;</translation>
     <translation text="credits4">           *Keine Ewoks kamen bei der Produktion von Holodice zu Schaden*</translation>
     <translation text="themeping">          @here Es geht weiter mit</translation>
-    <translation text="general_error_input">'Das sind nicht die Befehle die Ihr sucht' ~Obi-Wan Kenobi (hilfe unter '/help')</translation>
+    <translation text="general_error_input">'Das sind nicht die Befehle die Ihr sucht' ~Obi-Wan Kenobi (hilfe unter '/hilfe')</translation>
 
     <!-- language -->
     <translation text="language_selected">                  Aktuell ist folgende Sprache ausgewählt: </translation>

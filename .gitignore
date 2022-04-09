@@ -5,6 +5,8 @@ token.txt
 # Dev files
 test.xml
 note.txt
+todo.txt
+checklist.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
